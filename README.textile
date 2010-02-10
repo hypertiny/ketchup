@@ -1,0 +1,19 @@
+h1. Ketchup
+
+This is the official Ruby interface to the API for  "Ketchup":http://www.useketchup.com: A place for all your meeting notes.
+
+h2. Installation
+
+<pre><code>gem install ketchup</code></pre>
+
+h2. Usage
+
+At this point, I've no idea.
+
+h2. Contribution
+
+Fork and patch as you see fit - and please send pull requests if you think it's useful for others. Don't forget to write specs first, and don't mess with the version numbers please (or at least: only do so in a different branch).
+
+h2. Copyright
+
+Copyright (c) 2010 "Pat Allan":http://freelancing-gods.com and "Paul Campbell":http://pabcas.com/, released under an open licence.
