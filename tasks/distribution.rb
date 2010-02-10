@@ -13,8 +13,9 @@ Jeweler::Tasks.new do |gem|
   
   gem.add_dependency 'httparty', '0.5.2'
   
-  gem.add_development_dependency "rspec", ">= 1.2.9"
-  gem.add_development_dependency "yard",  ">= 0.5.3"
+  gem.add_development_dependency 'rspec',   '>= 1.2.9'
+  gem.add_development_dependency 'yard',    '>= 0.5.3'
+  gem.add_development_dependency 'fakeweb', '>= 1.2.8'
   
   gem.files = FileList[
     'lib/**/*.rb',
