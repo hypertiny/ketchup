@@ -66,8 +66,8 @@ describe Ketchup::Profile do
       @profile = Ketchup::Profile.new(@api)
     end
     
-    it "should return an array of meetings" do
-      @profile.meetings.should be_an(Array)
+    it "should return a meeting array of meetings" do
+      @profile.meetings.should be_a(Ketchup::MeetingArray)
       @profile.meetings.each do |meeting|
         meeting.should be_a(Ketchup::Meeting)
       end

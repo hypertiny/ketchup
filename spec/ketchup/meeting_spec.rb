@@ -58,7 +58,7 @@ describe Ketchup::Meeting do
   
   describe '#save' do
     it "should send a post if creating" do
-      @api.should_receive(:post)
+      @api.should_receive(:post).and_return({})
       
       meeting = Ketchup::Meeting.new @api, 'title' => 'foo'
       meeting.save
@@ -67,6 +67,7 @@ describe Ketchup::Meeting do
     it "should include writeable attributes in the post" do
       @api.should_receive(:post) do |query, options|
         options['title'].should == 'foo'
+        {}
       end
       
       meeting = Ketchup::Meeting.new @api, 'title' => 'foo'
@@ -76,14 +77,23 @@ describe Ketchup::Meeting do
     it "should not include read-only attributes in the post" do
       @api.should_receive(:post) do |query, options|
         options.keys.should_not include('created_at')
+        {}
       end
       
       meeting = Ketchup::Meeting.new @api, 'created_at' => Time.now
       meeting.save
     end
     
+    it "should update the object with the response" do
+      @api.stub!(:post => {'shortcode_url' => 'foo'})
+      
+      meeting = Ketchup::Meeting.new @api, 'title' => 'Foo'
+      meeting.save
+      meeting.shortcode_url.should == 'foo'
+    end
+    
     it "should send a put if updating" do
-      @api.should_receive(:put)
+      @api.should_receive(:put).and_return({})
       
       meeting = Ketchup::Meeting.new @api, 'shortcode_url' => 'foo'
       meeting.save
@@ -92,6 +102,7 @@ describe Ketchup::Meeting do
     it "should include writeable attributes in the put" do
       @api.should_receive(:put) do |query, options|
         options['title'].should == 'foo'
+        {}
       end
       
       meeting = Ketchup::Meeting.new @api,
@@ -102,6 +113,7 @@ describe Ketchup::Meeting do
     it "should not include read-only attributes in the put" do
       @api.should_receive(:put) do |query, options|
         options.keys.should_not include('created_at')
+        {}
       end
       
       meeting = Ketchup::Meeting.new @api,

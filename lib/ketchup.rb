@@ -9,4 +9,5 @@ end
 
 require 'ketchup/api'
 require 'ketchup/meeting'
+require 'ketchup/meeting_array'
 require 'ketchup/profile'

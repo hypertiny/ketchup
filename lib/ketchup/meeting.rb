@@ -1,6 +1,6 @@
 class Ketchup::Meeting
   attr_reader :shortcode_url, :public_url, :user_id, :created_at, :updated_at,
-    :project_id, :items
+    :project_id, :items, :api
   
   WriteableAttributes = [:title, :quick, :public, :date, :attendees,
     :description, :project_name, :location]
@@ -12,16 +12,7 @@ class Ketchup::Meeting
   def initialize(api, params = {})
     @api = api
     
-    @shortcode_url = params['shortcode_url']
-    @public_url    = params['public_url']
-    @user_id       = params['user_id']
-    @created_at    = params['created_at']
-    @updated_at    = params['updated_at']
-    @project_id    = params['project_id']
-    
-    WriteableAttributes.each do |attrib|
-      instance_variable_set "@#{attrib}".to_sym, params[attrib.to_s]
-    end
+    overwrite params
     
     @items = (params['items'] || []).collect { |hash|
       Ketchup::Item.new api, hash
@@ -30,9 +21,10 @@ class Ketchup::Meeting
   
   def save
     if new_record?
-      @api.post "/meetings.json", writeable_attributes
+      overwrite @api.post("/meetings.json", writeable_attributes)
     else
-      @api.put  "/meetings/#{shortcode_url}.json", writeable_attributes
+      overwrite @api.put("/meetings/#{shortcode_url}.json",
+        writeable_attributes)
     end
   end
   
@@ -47,6 +39,19 @@ class Ketchup::Meeting
   end
   
   private
+  
+  def overwrite(attributes)
+    @shortcode_url = attributes['shortcode_url']
+    @public_url    = attributes['public_url']
+    @user_id       = attributes['user_id']
+    @created_at    = attributes['created_at']
+    @updated_at    = attributes['updated_at']
+    @project_id    = attributes['project_id']
+    
+    WriteableAttributes.each do |attrib|
+      instance_variable_set "@#{attrib}".to_sym, attributes[attrib.to_s]
+    end
+  end
   
   def writeable_attributes
     WriteableAttributes.inject({}) do |hash, attrib|

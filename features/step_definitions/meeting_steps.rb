@@ -1,5 +1,5 @@
 Given /^an existing meeting for "([^\"]*)"$/ do |title|
-  Ketchup::Meeting.new(@profile.api, 'title' => title).save
+  @profile.meetings.create('title' => title)
 end
 
 When /^I set the location of "([^\"]*)" to "([^\"]*)"$/ do |title, location|

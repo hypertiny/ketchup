@@ -14,8 +14,6 @@ class Ketchup::Profile
   end
   
   def meetings
-    @meetings ||= api.get('/meetings.json').collect { |hash|
-      Ketchup::Meeting.new(api, hash)
-    }
+    @meetings ||= Ketchup::MeetingArray.new api
   end
 end
