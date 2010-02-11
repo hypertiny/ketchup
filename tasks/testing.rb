@@ -1,4 +1,5 @@
 require 'spec/rake/spectask'
+require 'cucumber/rake/task'
 
 Spec::Rake::SpecTask.new(:spec) do |spec|
   spec.libs << 'lib' << 'spec'
@@ -12,3 +13,5 @@ Spec::Rake::SpecTask.new(:rcov) do |spec|
 end
 
 task :spec => :check_dependencies
+
+Cucumber::Rake::Task.new

@@ -12,9 +12,6 @@ Before do
   @profile.meetings.each do |meeting|
     meeting.destroy
   end
-  # @profile.projects.each do |project|
-  #   project.destroy
-  # end
   
   @profile.reload!
 end

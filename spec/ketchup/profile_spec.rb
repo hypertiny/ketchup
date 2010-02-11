@@ -33,44 +33,19 @@ describe Ketchup::Profile do
   
   describe '#projects' do
     it "should return an array of projects" do
-      pending
       api     = stub('api', :get => [])
       profile = Ketchup::Profile.new(api)
       
       profile.projects.should be_an(Array)
-      profile.projects.each do |project|
-        project.should be_a(Ketchup::Project)
-      end
     end
   end
   
   describe '#meetings' do
-    before :each do
-      @api = stub('api', :get => [{
-        "updated_at"    => Time.now,
-        "project_id"    => nil,
-        "title"         => "Another Meeting",
-        "quick"         => nil,
-        "public"        => false,
-        "items"         => [],
-        "shortcode_url" => "Bmq58b",
-        "date"          => Time.now,
-        "attendees"     => "",
-        "description"   => nil,
-        "public_url"    => "bm5aTN",
-        "project_name"  => nil,
-        "user_id"       => 6542,
-        "location"      => nil,
-        "created_at"    => Time.now
-      }])
-      @profile = Ketchup::Profile.new(@api)
-    end
-    
     it "should return a meeting array of meetings" do
-      @profile.meetings.should be_a(Ketchup::MeetingArray)
-      @profile.meetings.each do |meeting|
-        meeting.should be_a(Ketchup::Meeting)
-      end
+      api = stub('api', :get => [])
+      profile = Ketchup::Profile.new(api)
+      
+      profile.meetings.should be_a(Ketchup::MeetingArray)
     end
   end
 end

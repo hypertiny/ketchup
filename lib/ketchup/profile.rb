@@ -16,4 +16,10 @@ class Ketchup::Profile
   def meetings
     @meetings ||= Ketchup::MeetingArray.new api
   end
+  
+  def projects
+    @projects ||= api.get('/projects.json').collect { |hash|
+      Ketchup::Project.new(api, hash)
+    }
+  end
 end
