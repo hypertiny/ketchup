@@ -8,4 +8,5 @@ module Ketchup
 end
 
 require 'ketchup/api'
+require 'ketchup/meeting'
 require 'ketchup/profile'
