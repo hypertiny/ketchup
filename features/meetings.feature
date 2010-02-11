@@ -16,6 +16,13 @@ Feature: Meetings
       And I reload all objects
     Then  the location of "An Important Discussion" is "Sugardough"
   
+  Scenario: Deleting Meetings
+    Given an existing meeting for "An Important Discussion"
+    When  I reload all objects
+      And I destroy the meeting for "An Important Discussion"
+      And I reload all objects
+    Then I should not have a meeting for "An Important Discussion"
+  
   Scenario: Upcoming Meetings
     Given an existing meeting for "Trampoline Planning" three days ago
       And an existing meeting for "Rails Camp Planning" in two days

@@ -12,10 +12,21 @@ When /^I set the location of "([^\"]*)" to "([^\"]*)"$/ do |title, location|
   meeting.save
 end
 
+When /^I destroy the meeting for "([^\"]*)"$/ do |title|
+  meeting = @profile.meetings.detect { |meeting| meeting.title == title }
+  meeting.destroy
+end
+
 Then /^I should have a meeting for "([^\"]*)"$/ do |title|
   @profile.meetings.detect { |meeting|
     meeting.title == title
   }.should_not be_nil
+end
+
+Then /^I should not have a meeting for "([^\"]*)"$/ do |title|
+  @profile.meetings.detect { |meeting|
+    meeting.title == title
+  }.should be_nil
 end
 
 Then /^the location of "([^\"]*)" is "([^\"]*)"$/ do |title, location|
