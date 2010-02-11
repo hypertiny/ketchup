@@ -3,7 +3,7 @@ class Ketchup::MeetingArray < Array
     @api = api
     
     replace @api.get('/meetings.json').collect { |hash|
-      Ketchup::Meeting.new(api, hash)
+      Ketchup::Meeting.new(@api, hash)
     }
   end
   
@@ -17,5 +17,23 @@ class Ketchup::MeetingArray < Array
     meeting = build(params)
     meeting.save
     meeting
+  end
+  
+  def upcoming
+    @upcoming ||= @api.get('/meetings/upcoming.json').collect { |hash|
+      Ketchup::Meeting.new(@api, hash)
+    }
+  end
+  
+  def previous
+    @previous ||= @api.get('/meetings/previous.json').collect { |hash|
+      Ketchup::Meeting.new(@api, hash)
+    }
+  end
+  
+  def today
+    @today ||= @api.get('/meetings/todays.json').collect { |hash|
+      Ketchup::Meeting.new(@api, hash)
+    }
   end
 end

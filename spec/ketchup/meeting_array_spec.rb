@@ -56,7 +56,7 @@ describe Ketchup::MeetingArray do
   
   describe '#create' do
     before :each do
-      @api.stub!(:get => [], :post => {'title' => 'foo'})
+      @api.stub!(:post => {'title' => 'foo'})
       @meetings = Ketchup::MeetingArray.new @api
     end
     
@@ -79,6 +79,63 @@ describe Ketchup::MeetingArray do
       @api.should_receive(:post)
       
       meeting = @meetings.create 'title' => 'foo'
+    end
+  end
+  
+  describe '#upcoming' do
+    before :each do
+      @meetings = Ketchup::MeetingArray.new @api
+    end
+    
+    it "should load the upcoming meetings from the API" do
+      @api.should_receive(:get) do |query, options|
+        query.should == '/meetings/upcoming.json'
+        []
+      end
+      
+      @meetings.upcoming
+    end
+    
+    it "should return an array of meetings" do
+      @meetings.upcoming.should be_an(Array)
+    end
+  end
+  
+  describe '#previous' do
+    before :each do
+      @meetings = Ketchup::MeetingArray.new @api
+    end
+    
+    it "should load the previous meetings from the API" do
+      @api.should_receive(:get) do |query, options|
+        query.should == '/meetings/previous.json'
+        []
+      end
+      
+      @meetings.previous
+    end
+    
+    it "should return an array of meetings" do
+      @meetings.previous.should be_an(Array)
+    end
+  end
+  
+  describe '#today' do
+    before :each do
+      @meetings = Ketchup::MeetingArray.new @api
+    end
+    
+    it "should load today's meetings from the API" do
+      @api.should_receive(:get) do |query, options|
+        query.should == '/meetings/todays.json'
+        []
+      end
+      
+      @meetings.today
+    end
+    
+    it "should return an array of meetings" do
+      @meetings.today.should be_an(Array)
     end
   end
 end
