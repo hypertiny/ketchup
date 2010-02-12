@@ -9,9 +9,7 @@ class Ketchup::Item
     
     overwrite params
     
-    @notes = (params['notes'] || []).collect { |hash|
-      Ketchup::Note.new api, self, hash
-    }
+    @notes = Ketchup::NoteArray.new @api, self, (params['notes'] || [])
   end
   
   def new_record?
