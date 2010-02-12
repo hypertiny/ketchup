@@ -14,9 +14,7 @@ class Ketchup::Meeting
     
     overwrite params
     
-    @items = (params['items'] || []).collect { |hash|
-      Ketchup::Item.new api, hash
-    }
+    @items = Ketchup::ItemArray.new @api, self, (params['items'] || [])
   end
   
   def save

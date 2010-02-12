@@ -31,7 +31,7 @@ describe Ketchup::Meeting do
       meeting.title.should == 'Another Meeting'
       meeting.quick.should be_nil
       meeting.public.should be_false
-      meeting.items.should == []
+      meeting.items.should be_an(Ketchup::ItemArray)
       meeting.shortcode_url.should == 'Bmq58b'
       meeting.date.should == time
       meeting.attendees.should == 'Me, You, Them'
