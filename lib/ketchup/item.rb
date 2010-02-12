@@ -27,6 +27,12 @@ class Ketchup::Item
     end
   end
   
+  def destroy
+    return if new_record?
+    
+    @api.delete "/items/#{shortcode_url}.json"
+  end
+  
   private
   
   def overwrite(attributes = {})

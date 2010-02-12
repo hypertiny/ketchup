@@ -106,4 +106,22 @@ describe Ketchup::Item do
       item.save
     end
   end
+  
+  describe '#destroy' do
+    it "should delete the item" do
+      @api.should_receive(:delete) do |query, options|
+        query.should == '/items/foo.json'
+      end
+      
+      item = Ketchup::Item.new @api, @meeting, 'shortcode_url' => 'foo'
+      item.destroy
+    end
+    
+    it "should do nothing if the record isn't already saved" do
+      @api.should_not_receive(:delete)
+      
+      item = Ketchup::Item.new @api, @meeting
+      item.destroy
+    end
+  end
 end
