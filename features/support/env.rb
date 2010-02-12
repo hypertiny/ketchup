@@ -19,7 +19,7 @@ end
 After do
   @profile.reload!
   
-  # @profile.meetings.each do |meeting|
-  #   meeting.destroy
-  # end
+  @profile.meetings.each do |meeting|
+    meeting.destroy
+  end
 end

@@ -3,7 +3,7 @@ require 'spec/spec_helper'
 describe Ketchup do
   describe '.authenticate' do
     it "should return a new Profile object on success" do
-      Ketchup::API.stub!(:new => stub('api'))
+      Ketchup::API.stub!(:new => stub('api', :get => {}))
       
       Ketchup.authenticate('user@domain.com', 'secret').
         should be_a(Ketchup::Profile)
