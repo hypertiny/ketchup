@@ -10,3 +10,9 @@ Feature: User Profile
       And I change my email to "ketchup@freelancing-gods.com"
       And I reconnect to the API
   
+  Scenario: Changing a User's Password
+    When  I change my password to "temporary"
+      And I reconnect to the API with "temporary"
+    Then  there should be no exceptions
+      And I change my password to "password"
+  

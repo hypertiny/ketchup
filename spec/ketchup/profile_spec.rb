@@ -118,4 +118,31 @@ describe Ketchup::Profile do
       profile.single_access_token.should == 'baz'
     end
   end
+  
+  describe '#change_password' do
+    before :each do
+      @api = stub('api', :get => {
+        "name"                => "foo",
+        "single_access_token" => "bar"
+      })
+    end
+    
+    it "should update the profile" do
+      @api.should_receive(:put) do |query, options|
+        query.should == '/profile.json'
+      end
+      
+      profile = Ketchup::Profile.new @api
+      profile.change_password 'baz'
+    end
+    
+    it "should use the given password" do
+      @api.should_receive(:put) do |query, options|
+        options['password'].should == 'baz'
+      end
+      
+      profile = Ketchup::Profile.new @api
+      profile.change_password 'baz'
+    end
+  end
 end

@@ -34,11 +34,15 @@ class Ketchup::Profile
   end
   
   def save
-    overwrite @api.put('/profile.json', {
+    overwrite @api.put('/profile.json',
       'name'      => name,
       'timezone'  => timezone,
       'email'     => email
-    })
+    )
+  end
+  
+  def change_password(password)
+    @api.put '/profile.json', 'password' => password
   end
   
   private
