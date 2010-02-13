@@ -19,4 +19,15 @@ class Ketchup::ItemArray < Array
     item.save
     item
   end
+  
+  def reorder(*items)
+    if items.collect(&:shortcode_url).sort != collect(&:shortcode_url).sort
+      raise ArgumentError, 'cannot sort a different set of items'
+    end
+    
+    @api.put "/meetings/#{@meeting.shortcode_url}/sort_items.json", {
+      'items' => items.collect(&:shortcode_url)
+    }
+    replace items
+  end
 end

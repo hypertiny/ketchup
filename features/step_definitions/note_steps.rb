@@ -28,6 +28,19 @@ When /^I delete note "([^\"]*)" from "([^\"]*)" in "([^\"]*)"$/ do |note_content
   }.destroy
 end
 
+When /^I change the note order of "([^\"]*)" in "([^\"]*)" to "([^\"]*)" then "([^\"]*)"$/ do |item_content, title, first, second|
+  notes = @profile.meetings.detect { |meeting|
+    meeting.title == title
+  }.items.detect { |item|
+    item.content == item_content
+  }.notes
+  
+  first_note  = notes.detect { |note| note.content == first }
+  second_note = notes.detect { |note| note.content == second }
+  
+  notes.reorder first_note, second_note
+end
+
 Then /^"([^\"]*)" in "([^\"]*)" should have a note "([^\"]*)"$/ do |item_content, title, note_content|
   @profile.meetings.detect { |meeting|
     meeting.title == title
@@ -46,4 +59,15 @@ Then /^"([^\"]*)" in "([^\"]*)" should not have a note "([^\"]*)"$/ do |item_con
   }.notes.detect { |note|
     note.content == note_content
   }.should be_nil
+end
+
+Then /^"([^\"]*)" in "([^\"]*)" should have note "([^\"]*)" before "([^\"]*)"$/ do |item_content, title, first, second|
+  notes = @profile.meetings.detect { |meeting|
+    meeting.title == title
+  }.items.detect { |item|
+    item.content == item_content
+  }.notes
+  
+  notes[0].content.should == first
+  notes[1].content.should == second
 end

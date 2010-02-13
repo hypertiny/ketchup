@@ -34,3 +34,12 @@ Feature: Notes
     Then  "Alpha" in "Trampoline" should have a note "Bar"
       And "Alpha" in "Trampoline" should not have a note "Foo"
   
+  Scenario: Reordering Notes
+    Given an existing meeting for "Trampoline"
+      And "Trampoline" has an item "Alpha"
+      And "Alpha" in "Trampoline" has a note "Foo"
+      And "Alpha" in "Trampoline" has a note "Bar"
+    When  I change the note order of "Alpha" in "Trampoline" to "Bar" then "Foo"
+      And I reload all objects
+    Then  "Alpha" in "Trampoline" should have note "Bar" before "Foo"
+  

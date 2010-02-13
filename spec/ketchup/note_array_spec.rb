@@ -4,7 +4,7 @@ describe Ketchup::NoteArray do
   before :each do
     @api     = stub('api', :get => [])
     @meeting = Ketchup::Meeting.new @api
-    @item    = Ketchup::Item.new @api, @meeting
+    @item    = Ketchup::Item.new @api, @meeting, 'shortcode_url' => 'bar'
   end
   
   it "should be a subclass of Array" do
@@ -72,6 +72,54 @@ describe Ketchup::NoteArray do
       @api.should_receive(:post)
       
       note = @notes.create 'content' => 'foo'
+    end
+  end
+  
+  describe '#reorder' do
+    before :each do
+      @api.stub!(:put => [])
+      @notes = Ketchup::NoteArray.new @api, @item, [
+        {'shortcode_url' => 'alpha', 'content' => 'Alpha'},
+        {'shortcode_url' => 'beta',  'content' => 'Beta' },
+        {'shortcode_url' => 'gamma', 'content' => 'Gamma'}
+      ]
+      @alpha, @beta, @gamma = @notes
+    end
+    
+    it "should send a put request to the correct url" do
+      @api.should_receive(:put) do |query, options|
+        query.should == '/items/bar/sort_notes.json'
+      end
+      
+      @notes.reorder @beta, @gamma, @alpha
+    end
+    
+    it "should send the shortcode urls in the given order" do
+      @api.should_receive(:put) do |query, options|
+        options['notes'].should == ['beta', 'gamma', 'alpha']
+      end
+      
+      @notes.reorder @beta, @gamma, @alpha
+    end
+    
+    it "should change the order of the array" do
+      @notes.reorder @beta, @gamma, @alpha
+      @notes[0].should == @beta
+      @notes[1].should == @gamma
+      @notes[2].should == @alpha
+    end
+    
+    it "should raise an error if not the same notes" do
+      note = Ketchup::Note.new @api, @item, 'shortcode_url' => 'delta'
+      lambda {
+        @notes.reorder note, @beta, @alpha
+      }.should raise_error(ArgumentError)
+    end
+    
+    it "should raise an error if not all the notes" do
+      lambda {
+        @notes.reorder @alpha, @gamma
+      }.should raise_error(ArgumentError)
     end
   end
 end

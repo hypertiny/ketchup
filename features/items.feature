@@ -31,3 +31,11 @@ Feature: Items
     Then  the "Trampoline" meeting should have an item "Beta"
       And the "Trampoline" meeting should not have an item "Alpha"
   
+  Scenario: Reordering Items
+    Given an existing meeting for "Trampoline"
+      And "Trampoline" has an item "Alpha"
+      And "Trampoline" has an item "Beta"
+    When  I change the item order of "Trampoline" to "Beta" then "Alpha"
+      And I reload all objects
+    Then  "Trampoline" should have item "Beta" before "Alpha"
+  
