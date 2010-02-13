@@ -8,11 +8,115 @@ h2. Installation
 
 h2. Usage
 
-At this point, I've no idea.
+Everything in Ketchup comes down to the user you're logged in as, and this library reflects that - you create a new connection and manage everything through a profile object:
+
+<pre><code>profile = Ketchup.authenticate('user@domain.com', 'password')</code></pre>
+
+None of the usage is particularly complex, but if you're confused with any of the notes below, either read "the documentation":http://rdoc.info/projects/hypertiny/ketchup or "the sauce":http://github.com/hypertiny/ketchup.
+
+h3. Meetings
+
+A profile object provides access to all your meetings simply enough:
+
+<pre><code>profile.meetings.each do |meeting|
+  puts meeting.title
+end
+meeting = profile.meetings.create 'title' => 'Important Discussion'
+meeting.title = 'Nothing Important'
+meeting.save</code></pre>
+
+All of a meeting's details are accesible through these meeting objects.
+
+<pre><code>meeting.location #=> 'Abbey Road'
+meeting.attendees #=> 'John, Paul, George and Ringo'</code></pre>
+
+Meeting dates are parsed from natural language, just like in Ketchup's web interface.
+
+<pre><code>meeting.date = 'Tomorrow at 4pm'</code></pre>
+
+You can also filter meetings by the same categories as the web interface:
+
+<pre><code>profile.meetings.today
+profile.meetings.upcoming
+profile.meetings.previous</code></pre>
+
+h3. Items
+
+Agenda items can be manipulated for each meeting. They're pretty slim objects through - the only editable attribute is their content.
+
+<pre><code>meeting.items.each do |item|
+  puts item.content
+end
+item = meeting.items.build 'content' => 'What are we talking about?'
+item.content = 'Minutes from Last Meeting'
+item.save</code></pre>
+
+You can also re-order a full set of items for a given meeting:
+
+<pre><code>meeting.items.reorder item_b, item_c, item_a</code></pre>
+
+h3. Notes
+
+Notes are the bullet points under each item, and behave in much the same way. Also, the only piece of information that they have of any interest is the content attribute.
+
+<pre><code>item.notes.each do |note|
+  puts note.content
+end
+note = item.notes.create 'content' => 'Are we done yet?'
+note.content = 'Next meeting will be shorter'
+note.save</code></pre>
+
+Just like with items, you can re-order a full set of notes:
+
+<pre><code>item.notes.reorder note_b, note_c, note_a</code></pre>
+
+h3. Projects
+
+Projects are implicitly created through meetings:
+
+<pre><code>profile.meetings.create(
+  'title' => 'Monday',
+  'project_name' => 'Stand ups'
+)</code></pre>
+
+You can access these projects through the profile object, and the meetings that are in each of them:
+
+<pre><code>profile.projects.each do |project|
+  puts project.name
+end
+project = profiles.project.first
+project.meetings.each do |meeting|
+  puts meeting.title
+end</code></pre>
+
+You can also change the names of projects through these objects:
+
+<pre><code>project.name = 'Sit downs'
+project.save</code></pre>
+
+h3. User Accounts
+
+Your profile object allows you to change the email, name and timezone associated with that account:
+
+<pre><code>profile.email = 'baz@foo.com'
+profile.name = 'Bazza'
+profile.timezone = 'Melbourne'
+profile.save</code></pre>
+
+You can also change the password, if you so desire:
+
+<pre><code>profile.change_password '12345'</code></pre>
+
+And there's also the ability to create completely new accounts:
+
+<pre><code>Ketchup::Profile.create 'who@first.base.com', 'secret',
+  'name' => 'Who', 'timezone' => 'Dublin'</code></pre>
+
+The name and timezone arguments are optional, though - and please note that you don't get a profile object back from that request, but will need to authenticate like normal to get access to that account's meetings.
 
 h2. Contribution
 
-Fork and patch as you see fit - and please send pull requests if you think it's useful for others. Don't forget to write specs first, and don't mess with the version numbers please (or at least: only do so in a different branch).
+Fork and patch as you see fit - and please send pull requests if you think it's useful for others. Don't forget to write specs and features first, and don't mess with the version numbers please (or at least: only do so in a different branch).
 
 h2. Copyright
 
