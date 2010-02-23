@@ -7,9 +7,10 @@ Spec::Rake::SpecTask.new(:spec) do |spec|
 end
 
 Spec::Rake::SpecTask.new(:rcov) do |spec|
-  spec.libs << 'lib' << 'spec'
-  spec.pattern = 'spec/**/*_spec.rb'
-  spec.rcov = true
+  spec.libs     << 'lib' << 'spec'
+  spec.rcov_opts = ['--exclude', 'spec', '--exclude', 'gems']
+  spec.pattern   = 'spec/**/*_spec.rb'
+  spec.rcov      = true
 end
 
 task :spec => :check_dependencies
